@@ -2,8 +2,10 @@ from enum import Enum
 
 
 class ResponseSignal(Enum):
-    File_Validated_Success = "File Validated Successfully"
-    File_Type_Not_Supported = "File type is not supported."
-    File_Size_Exceeded = "File size exceeds the maximum allowed size."
-    File_Uploaded_Success = "File uploaded successfully."
-    File_Upload_Failed = "File upload failed."
+    PROCESSING_FAILED = "File processing failed."
+    PROCESSING_SUCCESS = "File processed successfully."
+    FILE_VALIDATED_SUCCESS = "File validated successfully."
+    FILE_TYPE_NOT_SUPPORTED = "File type is not supported."
+    FILE_SIZE_EXCEEDED = "File size exceeds the maximum allowed size."
+    FILE_UPLOADED_SUCCESS = "File uploaded successfully."
+    FILE_UPLOAD_FAILED = "File upload failed."
