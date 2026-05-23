@@ -4,9 +4,13 @@ import string
 import random
 
 
+# BaseController serves as a foundational class for other controllers in the application, providing common functionalities and configurations.
+# It initializes application settings and defines utility methods that can be used across different controllers, such as
 class BaseController:
     def __init__(self):
         self.app_settings = get_settings()
+        # base_dir is set to the directory of the current file, and files_dir is set to a specific path within the assets directory where uploaded files will be stored.
+        # This setup allows for organized storage of files and easy access to application settings across all controllers that inherit from BaseController.
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         self.files_dir = os.path.join(self.base_dir, "../assets/files")
 
