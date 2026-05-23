@@ -20,3 +20,13 @@ class DataChunk(BaseModel):
         "arbitrary_types_allowed": True,
         "json_encoders": {ObjectId: str},
     }
+
+    @classmethod
+    def get_indexes(cls):
+        return [
+            {
+                "key": [("chunk_project_id", 1)],
+                "name": "chunk_project_id_index_1",
+                "unique": False,
+            }
+        ]

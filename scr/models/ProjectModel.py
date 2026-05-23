@@ -8,6 +8,30 @@ class ProjectModel(BaseDataModel):
         super().__init__(db_client=db_client)
         self.collection = self.db_client[DataBaseEnum.COLLECTION_PROJECT_NAME.value]
 
+    # The create_instance method is a static class method that initializes the collection and returns an instance of the ProjectModel class
+    # to solve the ptoblem of __init__ method not being async.
+    # This allows for proper initialization of the collection and indexes when creating an instance of the ProjectModel class.
+
+    @classmethod
+    async def create_instance(cls, db_client: object):
+        instance = cls(db_client)
+        await instance.init_collection()
+        return instance
+
+    async def init_collection(self):
+        all_collections = await self.db_client.list_collection_names()
+
+        if DataBaseEnum.COLLECTION_PROJECT_NAME.value not in all_collections:
+            await self.db_client.create_collection(
+                DataBaseEnum.COLLECTION_PROJECT_NAME.value
+            )
+
+        indexes = Project.get_indexes()
+        for index in indexes:
+            await self.collection.create_index(
+                index["key"], name=index["name"], unique=index.get("unique", False)
+            )
+
     async def create_project(self, project: Project):
         result = await self.collection.insert_one(
             project.dict(by_alias=True, exclude_unset=True)
