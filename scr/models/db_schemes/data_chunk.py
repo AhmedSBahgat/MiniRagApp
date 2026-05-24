@@ -15,6 +15,8 @@ class DataChunk(BaseModel):
 
     chunk_project_id: ObjectId
 
+    chunk_asset_id: ObjectId
+
     model_config = {
         "populate_by_name": True,
         "arbitrary_types_allowed": True,
