@@ -14,7 +14,16 @@ class BaseController:
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
         self.files_dir = os.path.join(self.base_dir, "../assets/files")
 
+        self.database_dir = os.path.join(self.base_dir, "../assets/database")
+
     def generate_random_string(self, length: int = 12):
         # This method generates a random string of a specified length using lowercase letters and digits.
         # It is useful for creating unique identifiers, such as filenames or project IDs, to avoid conflicts and ensure uniqueness in the application.
         return "".join(random.choices(string.ascii_lowercase + string.digits, k=length))
+
+    def get_database_path(self, db_name: str):
+        database_path = os.path.join(self.database_dir, db_name)
+
+        if not os.path.exists(database_path):
+            os.makedirs(database_path)
+        return database_path

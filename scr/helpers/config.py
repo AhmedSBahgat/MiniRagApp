@@ -12,6 +12,26 @@ class Settings(BaseSettings):
     MONGODB_URL: str
     MONGODB_DB_NAME: str
 
+    GENERATION_BACKEND: str
+    EMBEDDING_BACKEND: str
+
+    OPEN_AI_KEY: str = None
+    OPENAI_API_URL: str = None
+
+    COHERE_AI_KEY: str = None
+
+    GENERATION_MODEL_ID: str = None
+    EMBEDDING_MODEL_ID: str = None
+    EMBEDDING_MODEL_SIZE: int = None
+
+    DEFAULT_INPUT_MAX_CHARACTERS: int = None
+    DEFAULT_GENERATION_MAX_OUTPUT_TOKENS: int = None
+    DEFAULT_GENERATION_TEMPERATURE: float = None
+
+    VECTOR_DB_BACKEND: str
+    VECTOR_DB_PATH: str
+    VECTOR_DB_DISTANCE_METHOD: str = None
+
     model_config = SettingsConfigDict(env_file=".env")
 
 
