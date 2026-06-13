@@ -26,6 +26,7 @@ class CohereProvider(LLMInterface):
         # Initialize Cohere client here (not shown)
 
         self.client = cohere.Client(api_key=self.api_key)
+        self.enums = CoHereEnums
         self.logger = logging.getLogger(__name__)
 
     def set_generation_model(self, model_id: str):
@@ -38,6 +39,7 @@ class CohereProvider(LLMInterface):
     def process_text(self, text: str):
         return text[: self.default_input_max_characters].strip()
 
+    """
     def generate_text(
         self,
         prompt: str,
@@ -76,6 +78,50 @@ class CohereProvider(LLMInterface):
         if not response or not response.text:
             self.logger.error("Error while generating text with CoHere")
             return None
+        return response.text
+    """
+
+    def generate_text(
+        self,
+        prompt: str,
+        chat_history: list | None = None,
+        max_output_tokens: int = None,
+        temperature: float = None,
+    ):
+        if not self.client:
+            self.logger.error("Cohere client is not initialized.")
+            return None
+
+        if not self.generation_model_id:
+            self.logger.error("Generation model ID is not set for Cohere.")
+            return None
+
+        max_output_tokens = (
+            max_output_tokens
+            if max_output_tokens is not None
+            else self.default_generation_max_output_tokens
+        )
+
+        temperature = (
+            temperature
+            if temperature is not None
+            else self.default_generation_temperature
+        )
+
+        chat_history = list(chat_history) if chat_history else []
+
+        response = self.client.chat(
+            model=self.generation_model_id,
+            chat_history=chat_history,
+            message=self.process_text(prompt),
+            temperature=temperature,
+            max_tokens=max_output_tokens,
+        )
+
+        if not response or not response.text:
+            self.logger.error("Error while generating text with Cohere")
+            return None
+
         return response.text
 
     def embed_text(self, text: str, document_type: str = None):

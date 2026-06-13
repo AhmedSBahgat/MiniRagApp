@@ -1,9 +1,0 @@
-** angular
-pipes
-routing  --
-cpmponent --V
-service
-module  --
-decorator  --V
-localstorage --V
-guards

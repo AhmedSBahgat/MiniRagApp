@@ -1,8 +1,11 @@
+from urllib import response
+
 from qdrant_client import models, QdrantClient
 from ..VectorDBInterface import VectorDBInterface
 import logging
 import uuid
 from typing import List
+from models.db_schemes import RetrievedDocument
 
 
 class QdrantDBProvider(VectorDBInterface):
@@ -139,8 +142,21 @@ class QdrantDBProvider(VectorDBInterface):
         return True
 
     def search_by_vector(self, collection_name: str, vector: list, limit: int = 5):
-        return self.client.query_points(
+        response = self.client.query_points(
             collection_name=collection_name,
             query=vector,
             limit=limit,
         )
+
+        points = response.points if response and response.points else []
+
+        if len(points) == 0:
+            return []
+
+        return [
+            RetrievedDocument(
+                text=point.payload.get("text", ""),
+                score=point.score,
+            )
+            for point in points
+        ]
